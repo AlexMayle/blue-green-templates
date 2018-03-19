@@ -6,6 +6,16 @@
          "Type":"Number",
          "Default":1,
          "Description":"Number of desired instances in Auto Scaling Group"
+      },
+      "AMI":{
+          "Type":"String",
+          "Default":"ami-36fd354b",
+          "Description":"ID of the AMI to spawn instances from."
+      },
+      "Subnet":{
+          "Type":"String",
+          "Default":"subnet-5c3b2870",
+          "Description":"Subnet for both the load balancer and ASG"
       }
    },
    "Resources":{  
@@ -40,11 +50,11 @@
          "Type":"AWS::AutoScaling::LaunchConfiguration",
          "Properties":{  
             "IamInstanceProfile":"arn:aws:iam::204364282870:instance-profile/ec2-default-role",
-            "ImageId":"ami-868c4afb",
+            "ImageId":{"Ref":"AMI"},
             "InstanceType":"c4.2xlarge",
             "KeyName":"CFA-AWS-Dev",
             "SecurityGroups":[  
-               "sg-36b76a4e"
+               "sg-b1b6c5c7"
             ]
          }
       },
@@ -52,22 +62,24 @@
          "Type":"AWS::AutoScaling::AutoScalingGroup",
          "Properties":{  
             "AutoScalingGroupName":"BlueGreenDeployment",
-            "Cooldown":"300",
-            "DesiredCapacity":"1",
-            "HealthCheckGracePeriod":"300",
+            "Cooldown":"30",
+            "DesiredCapacity":{"Ref":"InstanceCount"},
+            "HealthCheckGracePeriod":"600",
             "HealthCheckType":"ELB",
-            "LaunchConfigurationName":"TempCDStageLC_28nov2018",
-            "MaxSize":"1",
-            "MinSize":"1",
+            "LaunchConfigurationName":{"Ref":"launchConfiguration"},
+            "MaxSize":{"Ref":"InstanceCount"},
+            "MinSize":{"Ref":"InstanceCount"},,
             "VPCZoneIdentifier":[
-                "subnet-597ca073",
-                "subnet-dfac0d87"
+                {
+                    "Ref":"Subnet"
+                }
             ],
             "TargetGroupARNs":[  
                {  
                   "Ref":"targetGroup"
                }
-            ]
+            ],
+            "HealthCheckGracePeriod":600
          }
       },
       "networkLoadBalancer":{  
@@ -75,12 +87,11 @@
          "Properties":{  
             "Name":"BlueGreen",
             "Type":"network",
-            "Scheme":"internet-facing",
-            "Subnets":[  
-               "subnet-597ca073",
-               "subnet-dfac0d87"
-            ],
-            "IpAddressType":"ipv4"
+            "Scheme":"internal",
+            "IpAddressType":"ipv4",
+            "Subnets":[
+                {"Ref":"Subnet"}
+            ] 
          }
       }
    }
