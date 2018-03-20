@@ -9,13 +9,8 @@
       },
       "AMI":{
           "Type":"String",
-          "Default":"ami-36fd354b",
+          "Default":"ami-09dc1774",
           "Description":"ID of the AMI to spawn instances from."
-      },
-      "Subnet":{
-          "Type":"String",
-          "Default":"subnet-5c3b2870",
-          "Description":"Subnet for both the load balancer and ASG"
       }
    },
    "Resources":{  
@@ -25,7 +20,7 @@
             "Port":80,
             "Protocol":"TCP",
             "TargetType":"instance",
-            "VpcId":"vpc-93e9cdf7"
+            "VpcId":"vpc-10190674"
          }
       },
       "Listener":{  
@@ -49,12 +44,12 @@
       "launchConfiguration":{  
          "Type":"AWS::AutoScaling::LaunchConfiguration",
          "Properties":{  
-            "IamInstanceProfile":"arn:aws:iam::204364282870:instance-profile/ec2-default-role",
+            "IamInstanceProfile":"arn:aws:iam::234741136504:instance-profile/ec2-default-role",
             "ImageId":{"Ref":"AMI"},
             "InstanceType":"c4.2xlarge",
-            "KeyName":"CFA-AWS-Dev",
+            "KeyName":"CFAProd",
             "SecurityGroups":[  
-               "sg-b1b6c5c7"
+               "sg-e16d5e99"
             ]
          }
       },
@@ -64,22 +59,21 @@
             "AutoScalingGroupName":"BlueGreenDeployment",
             "Cooldown":"30",
             "DesiredCapacity":{"Ref":"InstanceCount"},
-            "HealthCheckGracePeriod":"600",
+            "HealthCheckGracePeriod":"1500",
             "HealthCheckType":"ELB",
             "LaunchConfigurationName":{"Ref":"launchConfiguration"},
             "MaxSize":{"Ref":"InstanceCount"},
-            "MinSize":{"Ref":"InstanceCount"},,
+            "MinSize":{"Ref":"InstanceCount"},
             "VPCZoneIdentifier":[
-                {
-                    "Ref":"Subnet"
-                }
+                "subnet-b970e1e1",
+                "subnet-f67ff6dc",
+                "subnet-c6703efb"
             ],
             "TargetGroupARNs":[  
                {  
                   "Ref":"targetGroup"
                }
-            ],
-            "HealthCheckGracePeriod":600
+            ]
          }
       },
       "networkLoadBalancer":{  
@@ -90,7 +84,9 @@
             "Scheme":"internal",
             "IpAddressType":"ipv4",
             "Subnets":[
-                {"Ref":"Subnet"}
+                "subnet-b970e1e1",
+                "subnet-f67ff6dc",
+                "subnet-c6703efb"
             ] 
          }
       }
