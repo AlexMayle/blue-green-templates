@@ -132,12 +132,17 @@
       },
       "autoScalingGroup":{  
          "Type":"AWS::AutoScaling::AutoScalingGroup",
-         "UpdatePolicy":{
-             "AutoScalingRollingUpdate":{
-                 "SuspendProcesses":[
-                      "ReplaceUnhealthy"
-                 ]
-             }
+         "UpdatePolicy":{  
+            "AutoScalingRollingUpdate":{  
+               "SuspendProcesses":[  
+                  "ReplaceUnhealthy"
+               ]
+            },
+            "AutoScalingReplacingUpdate":{  
+               "SuspendProcesses":[  
+                  "ReplaceUnhealthy"
+               ]
+            }
          },
          "Properties":{  
             "AutoScalingGroupName":{  
@@ -171,6 +176,23 @@
                },
                {  
                   "Ref":"chickenWireTG"
+               }
+            ],
+            "Tags":[  
+               {  
+                  "Key":"Name",
+                  "Value":{  
+                     "Fn::Join":[  
+                        "-",
+                        [  
+                           {  
+                              "Ref":"Prefix"
+                           },
+                           "CDPROD"
+                        ]
+                     ]
+                  },
+                  "PropagateAtLaunch":true
                }
             ]
          }
