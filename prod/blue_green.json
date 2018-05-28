@@ -2,24 +2,31 @@
    "AWSTemplateFormatVersion":"2010-09-09",
    "Description":"BlueGreen ASG with Application LB",
    "Parameters":{  
-      "Prefix":{  
+      "Name":{  
          "Type":"String",
+         "Description":"Optional: Name for the CDs",
+         "Default":"CDPROD",
+         "AllowedPattern":".+"
+      },
+      "Color":{  
+         "Type":"String",
+         "Description":"Required: Choose a color which is not currently deployed",
          "AllowedValues":[  
             "BLUE",
             "GREEN",
             "YELLOW"
-         ],
-         "Description":"If the last deployment was Blue, pick Green, and vice versa"
+         ]
       },
       "InstanceCount":{  
-         "Type":"Number",
-         "Default":8,
-         "Description":"Number of desired instances in Auto Scaling Group"
+         "Type":"String",
+         "Description":"Required: Number of desired instances",
+         "Default":2,
+         "AllowedPattern":"[2-9]|1[0-2]?"
       },
       "AMI":{  
          "Type":"String",
-         "Default":"ami-b69137c9",
-         "Description":"ID of the AMI to spawn instances from."
+         "Description":"Required: ID of the AMI to spawn instances from (e.g. ami-xxxxxxxx)",
+         "AllowedPattern":"(ami-[0-9a-z]{8})|(ami-[0-9a-z]{17})"
       }
    },
    "Resources":{  
@@ -31,7 +38,10 @@
                   "-",
                   [  
                      {  
-                        "Ref":"Prefix"
+                        "Ref":"Color"
+                     },
+                     {
+                        "Ref":"Name"
                      },
                      "Com"
                   ]
@@ -58,7 +68,10 @@
                   "-",
                   [  
                      {  
-                        "Ref":"Prefix"
+                        "Ref":"Color"
+                     },
+                     {
+                        "Ref":"Name"
                      },
                      "ChickenWire"
                   ]
@@ -85,7 +98,10 @@
                   "-",
                   [  
                      {  
-                        "Ref":"Prefix"
+                        "Ref":"Color"
+                     },
+                     {
+                        "Ref":"Name"
                      },
                      "CowzVR"
                   ]
@@ -142,8 +158,18 @@
          },
          "Properties":{  
             "AutoScalingGroupName":{  
-               "Ref":"Prefix"
-            },
+                     "Fn::Join":[  
+                        "-",
+                        [  
+                           {  
+                              "Ref":"Color"
+                           },
+                           {  
+                              "Ref":"Name"
+                           }
+                        ]
+                     ]
+                  },
             "Cooldown":"30",
             "DesiredCapacity":{  
                "Ref":"InstanceCount"
@@ -173,6 +199,25 @@
                },
                {  
                   "Ref":"chickenWireTG"
+               }
+            ],
+            "Tags":[  
+               {  
+                  "Key":"Name",
+                  "Value":{  
+                     "Fn::Join":[  
+                        "-",
+                        [  
+                           {  
+                              "Ref":"Color"
+                           },
+                           {  
+                              "Ref":"Name"
+                           }
+                        ]
+                     ]
+                  },
+                  "PropagateAtLaunch":true
                }
             ]
          }
