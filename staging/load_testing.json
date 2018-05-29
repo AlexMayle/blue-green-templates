@@ -108,7 +108,7 @@
                      "\n",
                      [  
                         "<script>",
-                        "powershell.exe C:\\Users\\Administrator\\Desktop\\DeployPackages\\RunWarmup.ps1",
+                        powershell.exe C:\Users\Administrator\Desktop\RunWarmup.ps1,
                         "</script>",
                         "<persist>true</persist>"
                      ]
