@@ -53,7 +53,7 @@
             "HealthCheckTimeoutSeconds":7,
             "HealthyThresholdCount":"3",
             "UnhealthyThresholdCount":"2",
-            "HealthCheckPath":"/sitecore/service/healthcheck.aspx?testurl=www.chick-fil-astage.com?noredirect=1",
+            "HealthCheckPath":"/sitecore/service/healthcheck.aspx?testurl=lt-www.chick-fil-astage.com?noredirect=1",
             "Port":80,
             "Protocol":"HTTP",
             "TargetType":"instance",
@@ -83,37 +83,7 @@
             "HealthCheckTimeoutSeconds":7,
             "HealthyThresholdCount":"3",
             "UnhealthyThresholdCount":"2",
-            "HealthCheckPath":"/sitecore/service/healthcheck.aspx?testurl=thechickenwire.chick-fil-astage.com?noredirect=1",
-            "Port":80,
-            "Protocol":"HTTP",
-            "TargetType":"instance",
-            "VpcId":"vpc-93e9cdf7"
-         }
-      },
-      "cowzVrTG":{  
-         "Type":"AWS::ElasticLoadBalancingV2::TargetGroup",
-         "Properties":{  
-            "Name":{  
-               "Fn::Join":[  
-                  "-",
-                  [  
-                     {  
-                        "Ref":"Color"
-                     },
-                     {  
-                        "Ref":"Name"
-                     },
-                     "CowzVR"
-                  ]
-               ]
-            },
-            "HealthCheckIntervalSeconds":20,
-            "HealthCheckPort":"traffic-port",
-            "HealthCheckProtocol":"HTTP",
-            "HealthCheckTimeoutSeconds":7,
-            "HealthyThresholdCount":"3",
-            "UnhealthyThresholdCount":"2",
-            "HealthCheckPath":"/sitecore/service/healthcheck.aspx?testurl=cowzvr.chick-fil-astage.com?noredirect=1",
+            "HealthCheckPath":"/sitecore/service/healthcheck.aspx?testurl=lt-thechickenwire.chick-fil-astage.com?noredirect=1",
             "Port":80,
             "Protocol":"HTTP",
             "TargetType":"instance",
